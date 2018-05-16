@@ -95,14 +95,34 @@ def test_field_float():
     assert field.validate(0, 'field') == 0
     assert field.validate('0', 'field') == 0
 
+
 def test_field_date():
     field = Datetime(name='field')
 
-    assert field.recover({'field': '1499794899'}, 'field') == datetime(2017, 7, 11, 17, 41, 39)
+    assert field.recover({'field': '1499794899'}, 'field') == \
+        datetime(2017, 7, 11, 17, 41, 39)
     assert field.recover({'field': ''}, 'field') == None
     assert field.recover({'field': None}, 'field') == None
     assert field.recover({'field': 'None'}, 'field') == None
-    assert field.prepare(datetime(2017, 7, 11, 17, 41, 39)) == '1499794899'
+    assert field.prepare(datetime(2017, 7, 11, 17, 41, 39)) == \
+        '1499794899'
+
+
+def test_field_json():
+    field = Json(name='field')
+    assert field.recover({'field': '{"my_example": "test"}'}, 'field') == \
+        {'my_example': 'test'}
+    assert field.recover({'field': ''}, 'field') == None
+    assert field.recover({'field': None}, 'field') == None
+    assert field.recover({'field': 'None'}, 'field') == None
+
+    assert field.prepare({"my_example": "test"}) == '{"my_example": "test"}'
+
+    assert field.validate({'my_example': 'test'}, 'field') == \
+        {'my_example': 'test'}
+    assert field.validate('{"my_example": "test"}', 'field') == \
+        {"my_example": "test"}
+
 
 def test_field_location(nrm):
     class MyModel(Model):

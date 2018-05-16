@@ -267,6 +267,33 @@ class Integer(Field):
         return str(value)
 
 
+class Json(Field):
+
+    def validate(self, value, redis):
+        value = self.value_or_default(value)
+
+        self.validate_required(value)
+
+        try:
+            if type(value) == dict:
+                return value
+            else:
+                return json.loads(value)
+        except ValueError:
+            raise InvalidFieldError(self.name)
+
+    def recover(self, data, redis=None):
+        value = data.get(self.name)
+
+        if value == '' or value is None or value == 'None':
+            return None
+
+        return json.loads(value)
+
+    def prepare(self, value):
+        return json.dumps(value)
+
+
 class Float(Field):
 
     def validate(self, value, redis):
