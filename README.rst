@@ -1,6 +1,8 @@
 Coralillo
 =========
 
+Repository moved to https://gitlab.com/categulario/coralillo
+
 
 .. image:: https://travis-ci.org/getfleety/coralillo.svg?branch=master
    :target: https://travis-ci.org/getfleety/coralillo
